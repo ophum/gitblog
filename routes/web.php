@@ -14,3 +14,24 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::namespace('User')->group(function () {
+
+    Route::get('register', AuthController::class.'@showRegisterForm')->name('showRegister');
+    Route::post('register', AuthController::class.'@register')->name('register');
+
+    Route::get('login', AuthController::class.'@showLoginForm')->name('showLogin');
+    Route::post('login', AuthController::class.'@login')->name('login');
+
+    Route::middleware(['auth:web'])->group(function () {
+
+        Route::get('logout', AuthController::class.'@logout')->name('logout');
+
+        Route::get('/home', 'HomeController@index')->name('home');
+
+        Route::resource('/repository', 'RepositoryController');
+
+    });
+
+});
