@@ -11,8 +11,35 @@ class RepositoryController extends Controller
 
     private function create_token()
     {
-        return bin2hex(openssl_random_pseudo_bytes(16));
+        $token = bin2hex(openssl_random_pseudo_bytes(16));
+        while(Repository::where('token', 'like', $token)->exists()){
+            $token = bin2hex(openssl_random_pseudo_bytes(16));    
+        }
+        return $token
+    }
 
+    /**
+     * Detect webhook
+     * 
+     * @param  \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function push(Request $request)
+    {
+        $token = $request->token;
+
+        if(Repository::where('token', 'like', $token)->exists()){
+            $repo = Repository::where('token', 'like', $token)->get()[0];
+            $name = explode('/', $repo->name);
+            $name = $name[count($name) - 1];
+            $name = preg_replace('/(.git)$/', '', $name);
+            if(file_exists($name . '/.git')){
+                $cmd = "cd $name;git pull";
+            }else {
+                $cmd = "git clone " . $repo->name;
+            }
+            $out = shell_exec($cmd);
+        }
     }
     /**
      * Display a listing of the resource.

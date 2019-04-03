@@ -15,6 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/push/{token}', 'User\RepositoryController@push');
 
 Route::namespace('User')->group(function () {
 
