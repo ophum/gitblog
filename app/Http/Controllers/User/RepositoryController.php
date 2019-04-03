@@ -15,7 +15,7 @@ class RepositoryController extends Controller
         while(Repository::where('token', 'like', $token)->exists()){
             $token = bin2hex(openssl_random_pseudo_bytes(16));    
         }
-        return $token
+        return $token;
     }
 
     /**
