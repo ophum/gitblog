@@ -50,7 +50,7 @@ class RepositoryController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $repositories = Repository::find($user->id)->all();
+        $repositories = Repository::where('user_id', '=', $user->id)->get();
         return view('repository.index', compact('repositories'));
     }
 
