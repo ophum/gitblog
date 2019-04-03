@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function(){
     return view('welcome');
 });
 
@@ -19,9 +19,9 @@ Route::get('/push/{token}', 'User\RepositoryController@push');
 
 Route::namespace('User')->group(function () {
 
-   Route::middleware(['auth:web'])->group(function () {
+    Route::middleware(['auth:web'])->group(function () {
 
-        Route::get('/home', 'HomeController@index')->name('home');
+        Route::get('/home', 'RepositoryController@index')->name('home');
 
         Route::resource('/repository', 'RepositoryController');
 
